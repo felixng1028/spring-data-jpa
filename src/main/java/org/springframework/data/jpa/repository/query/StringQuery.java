@@ -247,6 +247,9 @@ class StringQuery implements DeclaredQuery {
 					greatestParameterIndex);
 
 			String resultingQuery = spelExtractor.getQueryString();
+			SpelExtractor spelExtractorForQuoting = createSpelExtractor(resultingQuery, parametersShouldBeAccessedByIndex,
+					greatestParameterIndex);
+
 			Matcher matcher = PARAMETER_BINDING_PATTERN.matcher(resultingQuery);
 
 			int expressionParameterIndex = parametersShouldBeAccessedByIndex ? greatestParameterIndex : 0;
@@ -254,7 +257,7 @@ class StringQuery implements DeclaredQuery {
 			boolean usesJpaStyleParameters = false;
 			while (matcher.find()) {
 
-				if (spelExtractor.isQuoted(matcher.start())) {
+				if (spelExtractorForQuoting.isQuoted(matcher.start())) {
 					continue;
 				}
 
